@@ -397,7 +397,6 @@ func analyseNSInclude(baseurl string, ce *ast.CallExpr) string {
 		x := p.(*ast.UnaryExpr).X.(*ast.CompositeLit).Type.(*ast.SelectorExpr)
 		if v, ok := importlist[fmt.Sprint(x.X)]; ok {
 			cname = v + x.Sel.Name
-			logger.Debug(cname)
 		}
 		if apis, ok := controllerList[cname]; ok {
 			for rt, item := range apis {
@@ -470,11 +469,11 @@ func analyseControllerPkg(localName, pkgpath string, maxDepth int) {
 			return
 		}
 		pkgCache[pkgpath] = struct{}{}
+		//} else {
+		//	logger.Errorf("Package '%s' does not exist in the GOPATH", pkgpath)
 	} else {
-		logger.Errorf("Package '%s' does not exist in the GOPATH", pkgpath)
+		return
 	}
-
-	logger.Debugf("pkg real path:%s", pkgRealpath)
 
 	fileSet := token.NewFileSet()
 	var err error
